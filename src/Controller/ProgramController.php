@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
+use App\Form\ProgramType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,9 +33,34 @@ class ProgramController extends AbstractController
     }
 
     /**
+     * Créé une série
+     *
+     * @Route("/new", methods={"GET", "POST"}, name="new")
+     * @return Response
+     */
+    public function new(Request $request)
+    {
+        $program = new Program();
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($program);
+            $em->flush();
+
+            return $this->redirectToRoute('program_index');
+        }
+
+        // Render the form
+        return $this->render('program/new.html.twig', ["form" => $form->createView()]);
+    }
+
+
+    /**
      * Récupère une série par son id
      *
-     * @Route("/{id<^[0-9]+$>}", methods={"GET"}, name="show")
+     * @Route("/{program<^[0-9]+$>}", methods={"GET"}, name="show")
      * @return Response
      */
     public function show(Program $program): Response
@@ -42,7 +69,7 @@ class ProgramController extends AbstractController
 
         if (!$program) {
             throw $this->createNotFoundException(
-                "Aucune série avec l'identifiant {$id} n'existe dans la base de données"
+                "Aucune série avec l'identifiant {$program->id} n'existe dans la base de données"
             );
         }
 
