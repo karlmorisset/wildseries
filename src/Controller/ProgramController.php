@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Season;
+use App\Entity\Episode;
 use App\Entity\Program;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,10 +36,8 @@ class ProgramController extends AbstractController
      * @Route("/{id<^[0-9]+$>}", methods={"GET"}, name="show")
      * @return Response
      */
-    public function show(int $id): Response
+    public function show(Program $program): Response
     {
-        $program = $this->getDoctrine()->getRepository(Program::class)->findOneBy(['id' => $id]);
-
         $seasons = $program->getSeasons();
 
         if (!$program) {
@@ -57,24 +56,22 @@ class ProgramController extends AbstractController
     /**
      * Récupère une série par son id
      *
-     * @Route("/{programId<^[0-9]+$>}/season/{seasonId<^[0-9]+$>}", methods={"GET"}, name="season_show")
+     * @Route("/{program<^[0-9]+$>}/season/{season<^[0-9]+$>}", methods={"GET"}, name="season_show")
      * @return Response
      */
-    public function showSeason(int $programId, int $seasonId): Response
+    public function showSeason(Program $program, Season $season): Response
     {
-        $program = $this->getDoctrine()->getRepository(Program::class)->findOneBy(['id' => $programId]);
-        $season = $this->getDoctrine()->getRepository(Season::class)->findOneBy(['id' => $seasonId]);
         $episodes = $season->getEpisodes();
 
         if (!$program) {
             throw $this->createNotFoundException(
-                "Aucune série avec l'identifiant {$programId} n'existe dans la base de données"
+                "Aucune série avec l'identifiant {$program->id} n'existe dans la base de données"
             );
         }
 
         if (!$season) {
             throw $this->createNotFoundException(
-                "Aucune saison avec l'identifiant {$seasonId} n'existe dans la base de données"
+                "Aucune saison avec l'identifiant {$season->id} n'existe dans la base de données"
             );
         }
 
@@ -82,6 +79,20 @@ class ProgramController extends AbstractController
             'program' => $program,
             'season' => $season,
             'episodes' => $episodes
+        ]);
+    }
+    /**
+     * Récupère une série par son id
+     *
+     * @Route("/{program<^[0-9]+$>}/season/{season<^[0-9]+$>}/episode/{episode<^[0-9]+$>}", methods={"GET"}, name="episode_show")
+     * @return Response
+     */
+    public function showEpisode(Program $program, Season $season, Episode $episode): Response
+    {
+        return $this->render('program/episode_show.html.twig', [
+            'program' => $program,
+            'season' => $season,
+            'episode' => $episode
         ]);
     }
 }
