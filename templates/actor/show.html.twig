@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les apparitions de {{actor.name}}{% endblock %}
+
+{% block body %}
+    <h1>{{ actor.name }}</h1>
+
+   {% for program in actor.programs %}
+        <div>
+            <a href="{{path('program_show', {program: program.id})}}">{{program.title}}</a>
+        </div>
+
+    {% else %}
+        Aucune série trouvée.
+    {% endfor %}
+
+    <a href="{{ path('program_index') }}">
+        Retour à la liste des programmes
+    </a>
+
+{% endblock %}
