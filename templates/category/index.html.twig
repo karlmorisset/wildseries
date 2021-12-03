@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes le catégories{% endblock %}
+
+{% block body %}
+    {% for category in categories %}
+        <div>
+            <h2><a href="{{ path("category_show", { categoryName: category.name|lower }) }}">{{ loop.index }} / {{ category.name }}</a></h2>
+        </div>
+
+    {% else %}
+        Aucune catégorie trouvée.
+    {% endfor %}
+
+    <a href="{{ path('app_index') }}">
+        Retour à l'accueil
+    </a>
+{% endblock %}
