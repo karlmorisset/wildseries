@@ -22,8 +22,9 @@ class _01ActorFixtures extends Fixture
         foreach(self::ACTORS as $key => $actorName) {
             $actor = new Actor();
             $actor->setName($actorName);
-            $manager->persist($actor);
             $this->addReference('actor_' . $key, $actor);
+
+            $manager->persist($actor);
         }
 
         $manager->flush();
