@@ -9,8 +9,9 @@ use App\DataFixtures\ProgramFixtures;
 use App\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _03SeasonFixtures extends Fixture
+class _03SeasonFixtures extends Fixture implements FixtureGroupInterface
 {
     const SEASONS = [
         [
@@ -67,5 +68,10 @@ class _03SeasonFixtures extends Fixture
         return [
             ProgramFixtures::class
         ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['group2'];
     }
 }

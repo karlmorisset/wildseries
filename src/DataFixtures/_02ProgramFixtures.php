@@ -3,13 +3,17 @@
 namespace App\DataFixtures;
 
 use App\Entity\Program;
+use App\Services\Slugify;
 use App\DataFixtures\ActorFixtures;
 use App\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _02ProgramFixtures extends Fixture
+class _02ProgramFixtures extends Fixture implements FixtureGroupInterface
 {
+    protected $slugify;
+
     const PROGRAMS = [
         [
             "title" => "The Big Bang Theory",
@@ -50,6 +54,11 @@ class _02ProgramFixtures extends Fixture
         ]
     ];
 
+    public function __construct(Slugify $slugify)
+    {
+        $this->slugify = $slugify;
+    }
+
     public function load(ObjectManager $manager): void
     {
         foreach(self::PROGRAMS as $key => $p){
@@ -58,6 +67,7 @@ class _02ProgramFixtures extends Fixture
             $program->setSynopsis($p['synopsis']);
             $program->setPoster($p['poster']);
             $program->setCategory($this->getReference($p['category']));
+            $program->setSlug($this->slugify->generate($p['title']));
 
             for ($i=0; $i < 3; $i++) {
                 $program->addActor($this->getReference('actor_' . $i));
@@ -78,5 +88,10 @@ class _02ProgramFixtures extends Fixture
           ActorFixtures::class,
           CategoryFixtures::class,
         ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['group1', 'group2'];
     }
 }

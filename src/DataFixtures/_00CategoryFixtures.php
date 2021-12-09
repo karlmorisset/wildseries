@@ -3,10 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _00CategoryFixtures extends Fixture
+class _00CategoryFixtures extends Fixture implements FixtureGroupInterface
 {
     const CATEGORIES = [
         'Action',
@@ -23,11 +24,16 @@ class _00CategoryFixtures extends Fixture
         foreach (self::CATEGORIES as $key => $c) {
             $category = new Category();
             $category->setName($c);
-            $this->addReference('category_' . strtolower($c), $category);
-
             $manager->persist($category);
+
+            $this->addReference('category_' . strtolower($c), $category);
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['group1', 'group2'];
     }
 }
