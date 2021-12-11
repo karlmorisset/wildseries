@@ -14,6 +14,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 
@@ -54,14 +55,17 @@ class ProgramController extends AbstractController
             $em->persist($program);
             $em->flush();
 
-
             $email = (new Email())
-                ->from("ok@ok.com")
-                ->to('karl.morisset@gmail.com')
+                ->from($this->getParameter('mailer_from'))
+                ->to('your_email@example.com')
                 ->subject('Une nouvelle série vient d\'être publiée !')
-                ->html('<p>Une nouvelle série vient d\'être publiée sur Wild Séries !</p>');
+                ->html($this->renderView('program/newProgramEmail.html.twig', ['program' => $program]));
 
-            $mailer->send($email);
+            try {
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                dd("not sent");
+            }
 
             return $this->redirectToRoute('program_index');
         }

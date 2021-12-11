@@ -8,10 +8,10 @@ class Slugify
     {
         /*
             à, ç, etc. deviennent a, c, etc.;
-        !, apostrophes et autres ponctuations sont supprimées;
-        les espaces en début et fin de chaînes sont supprimées;
-        il ne peut pas contenir plusieurs - (tirets) successifs;
-        la chaîne générée est en minuscules
+            !, apostrophes et autres ponctuations sont supprimées;
+            les espaces en début et fin de chaînes sont supprimées;
+            il ne peut pas contenir plusieurs - (tirets) successifs;
+            la chaîne générée est en minuscules
         */
 
         // replace non letter or digits by divider
