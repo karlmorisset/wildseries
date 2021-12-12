@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _02ProgramFixtures extends Fixture implements FixtureGroupInterface
+class ProgramFixtures extends Fixture implements FixtureGroupInterface
 {
     protected $slugify;
 

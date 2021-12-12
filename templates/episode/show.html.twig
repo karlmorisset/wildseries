@@ -31,4 +31,22 @@
     <a href="{{ path('episode_edit', {episode: episode.slug}) }}">edit</a>
 
     {{ include('episode/_delete_form.html.twig') }}
+
+    {% if app.user %}
+        {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button type="submit">Ajouter un commentaire</button>
+        {{ form_end(form) }}
+    {% endif %}
+
+    {% for comment in episode.comments %}
+
+        <div>
+            Rate : {{comment.rate}}/5
+            <h3>
+                {{comment.comment}}
+            </h3>
+                {{comment.author.username}}
+        </div>
+    {% endfor %}
 {% endblock %}

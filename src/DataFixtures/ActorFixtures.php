@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _01ActorFixtures extends Fixture implements FixtureGroupInterface
+class ActorFixtures extends Fixture implements FixtureGroupInterface
 {
     public const ACTORS = [
         "Andrew Lincoln",

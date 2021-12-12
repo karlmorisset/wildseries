@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _00CategoryFixtures extends Fixture implements FixtureGroupInterface
+class CategoryFixtures extends Fixture implements FixtureGroupInterface
 {
     const CATEGORIES = [
         'Action',

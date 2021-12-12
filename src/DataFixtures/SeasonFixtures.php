@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class _03SeasonFixtures extends Fixture implements FixtureGroupInterface
+class SeasonFixtures extends Fixture implements FixtureGroupInterface
 {
     const SEASONS = [
         [

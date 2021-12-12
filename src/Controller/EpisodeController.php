@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Episode;
+use App\Form\CommentType;
 use App\Form\EpisodeType;
 use App\Services\Slugify;
 use Symfony\Component\Mime\Email;
@@ -67,13 +69,27 @@ class EpisodeController extends AbstractController
     }
 
     /**
-     * @Route("/{episode<^[a-zA-Z0-9-]+$>}", name="episode_show", methods={"GET"})
+     * @Route("/{episode<^[a-zA-Z0-9-]+$>}", name="episode_show", methods={"GET|POST"})
      * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode": "slug"}})
      */
-    public function show(Episode $episode): Response
+    public function show(Request $request, Episode $episode, EntityManagerInterface $em): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setAuthor($this->getUser());
+            $comment->setEpisode($episode);
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('episode_index');
+        }
+
         return $this->render('episode/show.html.twig', [
             'episode' => $episode,
+            'form' => $form->createView()
         ]);
     }
 
@@ -85,8 +101,8 @@ class EpisodeController extends AbstractController
         Request $request,
         Episode $episode,
         EntityManagerInterface $em,
-        Slugify $slugify): Response
-    {
+        Slugify $slugify
+    ): Response {
         $form = $this->createForm(EpisodeType::class, $episode);
         $form->handleRequest($request);
 
@@ -108,7 +124,7 @@ class EpisodeController extends AbstractController
      */
     public function delete(Request $request, Episode $episode, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$episode->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_token'))) {
             $em->remove($episode);
             $em->flush();
         }
