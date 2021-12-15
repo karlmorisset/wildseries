@@ -26,6 +26,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $hashedPassword = $this->passwordHasher->hashPassword($user, "toto");
         $user->setPassword($hashedPassword);
         $manager->persist($user);
+        $this->addReference("user_contributor", $user);
 
         // Création d’un utilisateur de type “administrateur”
         $admin = new User();
@@ -34,6 +35,7 @@ class UserFixtures extends Fixture implements FixtureGroupInterface
         $hashedPassword = $this->passwordHasher->hashPassword($admin,'root');
         $admin->setPassword($hashedPassword);
         $manager->persist($admin);
+        $this->addReference("user_admin", $admin);
 
         $manager->flush();
     }

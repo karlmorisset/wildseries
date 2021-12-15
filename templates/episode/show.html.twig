@@ -48,5 +48,6 @@
             </h3>
                 {{comment.author.username}}
         </div>
+        {{ include('episode/_delete_comment_form.html.twig') }}
     {% endfor %}
 {% endblock %}

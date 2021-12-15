@@ -1,9 +1,8 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
-        {{ form_widget(form) }}
-        <button type="submit">Ajouter une série</button>
-    {{ form_end(form) }}
+    <h1>Ajouter une série</h1>
+
+    {{ include('program/_form.html.twig', {'button_label': 'Ajouter une série'}) }}
 
 {% endblock %}

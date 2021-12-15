@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/program", name="program_")
@@ -41,7 +41,7 @@ class ProgramController extends AbstractController
     /**
      * Créé une série
      *
-     * @Route("/new", methods={"GET", "POST"}, name="new")
+     * @Route("/new", methods={"GET|POST", "POST"}, name="new")
      * @return Response
      */
     public function new(Request $request, EntityManagerInterface $em, Slugify $slugify, MailerInterface $mailer)
@@ -52,6 +52,8 @@ class ProgramController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $program->setSlug($slugify->generate($program->getTitle()));
+            $program->setOwner($this->getUser());
+
             $em->persist($program);
             $em->flush();
 
@@ -78,7 +80,7 @@ class ProgramController extends AbstractController
     /**
      * Récupère une série par son id
      *
-     * @Route("/{program<^[a-zA-Z0-9-]+$>}", methods={"GET"}, name="show")
+     * @Route("/{program<^[a-zA-Z0-9-]+$>}", methods={"GET|POST"}, name="show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program": "slug"}})
      * @return Response
      */
@@ -98,11 +100,39 @@ class ProgramController extends AbstractController
         ]);
     }
 
+    /**
+     * Mise à jour d'une série
+     * 
+     * @Route("/{program<^[a-zA-Z0-9-]+$>}/edit", methods={"GET|POST"}, name="edit")
+     * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program": "slug"}})
+     * @return Response
+     */
+    public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->getUser() != $program->getOwner()) {
+            throw new AccessDeniedException("Seul le créateur de la série peut la modifier");
+        }
+        
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form,
+        ]);
+    }
+
 
     /**
-     * Récupère une série par son id
+     * Récupère une saison par son id et par sa série
      *
-     * @Route("/{program<^[a-zA-Z0-9-]+$>}/season/{season<^[0-9]+$>}", methods={"GET"}, name="season_show")
+     * @Route("/{program<^[a-zA-Z0-9-]+$>}/season/{season<^[0-9]+$>}", methods={"GET|POST"}, name="season_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program": "slug"}})
      * @return Response
      */
@@ -129,10 +159,11 @@ class ProgramController extends AbstractController
         ]);
     }
 
+
     /**
-     * Récupère une série par son slug
+     * Récupère un épisode par son slug, l'id de la saison et le slug de la série
      *
-     * @Route("/{program<^[a-zA-Z0-9-]+$>}/season/{season<^[0-9]+$>}/episode/{episode<^[a-zA-Z0-9-]+$>}", methods={"GET"}, name="episode_show")
+     * @Route("/{program<^[a-zA-Z0-9-]+$>}/season/{season<^[0-9]+$>}/episode/{episode<^[a-zA-Z0-9-]+$>}", methods={"GET|POST"}, name="episode_show")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program": "slug"}})
      * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode": "slug"}})
      * @return Response

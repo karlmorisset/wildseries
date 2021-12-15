@@ -77,14 +77,16 @@ class EpisodeController extends AbstractController
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
+        
+        if (!is_null($this->getUser())) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $comment->setAuthor($this->getUser());
+                $comment->setEpisode($episode);
+                $em->persist($comment);
+                $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setAuthor($this->getUser());
-            $comment->setEpisode($episode);
-            $em->persist($comment);
-            $em->flush();
-
-            return $this->redirectToRoute('episode_index');
+                return $this->redirectToRoute('episode_index');
+            }
         }
 
         return $this->render('episode/show.html.twig', [

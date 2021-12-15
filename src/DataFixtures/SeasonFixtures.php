@@ -10,8 +10,9 @@ use App\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class SeasonFixtures extends Fixture implements FixtureGroupInterface
+class SeasonFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
     const SEASONS = [
         [

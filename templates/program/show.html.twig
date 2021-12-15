@@ -22,13 +22,11 @@
         {% endfor %}
     </ul>
 
-
-
-
-
     {% for season in seasons %}
         <div><a href="{{path('program_season_show', { program: program.slug, season: season.id })}}">Saison {{season.number}}</a></div>
     {% endfor %}
+
+    <a href="{{ path('program_edit', {'program': program.slug}) }}">Modifier la série</a>
 
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes

@@ -9,8 +9,9 @@ use App\DataFixtures\SeasonFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class EpisodeFixtures extends Fixture implements FixtureGroupInterface
+class EpisodeFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
     public function __construct(Slugify $slugify)
     {

@@ -9,8 +9,9 @@ use App\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class ProgramFixtures extends Fixture implements FixtureGroupInterface
+class ProgramFixtures extends Fixture implements FixtureGroupInterface, DependentFixtureInterface
 {
     protected $slugify;
 
@@ -51,8 +52,10 @@ class ProgramFixtures extends Fixture implements FixtureGroupInterface
             "synopsis" => "Le policier Rick Grimes se réveille après un long coma. Il découvre avec effarement que le monde, ravagé par une épidémie, est envahi par les morts-vivants.",
             "poster" => "https://m.media-amazon.com/images/M/MV5BZmFlMTA0MmUtNWVmOC00ZmE1LWFmMDYtZTJhYjJhNGVjYTU5XkEyXkFqcGdeQXVyMTAzMDM4MjM0._V1_.jpg",
             'category' => "category_horreur"
-        ]
-    ];
+            ]
+        ];
+        
+    public const USERS = ["user_contributor", "user_admin"];
 
     public function __construct(Slugify $slugify)
     {
@@ -68,6 +71,7 @@ class ProgramFixtures extends Fixture implements FixtureGroupInterface
             $program->setPoster($p['poster']);
             $program->setCategory($this->getReference($p['category']));
             $program->setSlug($this->slugify->generate($p['title']));
+            $program->setOwner($this->getReference(self::USERS[rand(0,1)]));
 
             for ($i=0; $i < 3; $i++) {
                 $program->addActor($this->getReference('actor_' . $i));
@@ -85,8 +89,9 @@ class ProgramFixtures extends Fixture implements FixtureGroupInterface
     {
         // Tu retournes ici toutes les classes de fixtures dont ProgramFixtures dépend
         return [
-          ActorFixtures::class,
-          CategoryFixtures::class,
+            UserFixtures::class,
+            ActorFixtures::class,
+            CategoryFixtures::class
         ];
     }
 

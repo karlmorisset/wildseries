@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une série{% endblock %}
+
+{% block body %}
+    <h1>Modifier une série</h1>
+
+    {{ include('program/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+    <a href="{{ path('program_index') }}">back to list</a>
+{% endblock %}
