@@ -77,7 +77,7 @@ class EpisodeController extends AbstractController
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-        
+
         if (!is_null($this->getUser())) {
             if ($form->isSubmitted() && $form->isValid()) {
                 $comment->setAuthor($this->getUser());
@@ -85,7 +85,7 @@ class EpisodeController extends AbstractController
                 $em->persist($comment);
                 $em->flush();
 
-                return $this->redirectToRoute('episode_index');
+                return $this->redirectToRoute('episode_show', ["episode" => $episode->getSlug()]);
             }
         }
 
@@ -122,7 +122,8 @@ class EpisodeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="episode_delete", methods={"POST"})
+     * @Route("/{episode}/delete", name="episode_delete", methods={"POST"})
+     * @ParamConverter("episode", class="App\Entity\Episode", options={"mapping": {"episode": "slug"}})
      */
     public function delete(Request $request, Episode $episode, EntityManagerInterface $em): Response
     {

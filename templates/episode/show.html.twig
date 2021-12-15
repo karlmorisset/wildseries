@@ -32,7 +32,7 @@
 
     {{ include('episode/_delete_form.html.twig') }}
 
-    {% if app.user %}
+    {% if is_granted("ROLE_CONTRIBUTOR") %}
         {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
             {{ form_widget(form) }}
             <button type="submit">Ajouter un commentaire</button>
@@ -48,6 +48,11 @@
             </h3>
                 {{comment.author.username}}
         </div>
-        {{ include('episode/_delete_comment_form.html.twig') }}
+
+
+        {% if (app.user and ((app.user == comment.author)  or ("ROLE_ADMIN" in app.user.roles))) %}
+            {{ include('episode/_delete_comment_form.html.twig') }}
+        {% endif %}
+
     {% endfor %}
 {% endblock %}

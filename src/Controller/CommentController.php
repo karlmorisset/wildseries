@@ -16,12 +16,15 @@ class CommentController extends AbstractController
      */
     public function delete(Request $request, Comment $comment, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
-            $epidodeId = $comment->getEpisode()->getId();
-            $em->remove($comment);
-            $em->flush();
+        $epidode = $comment->getEpisode()->getSlug();
+
+        if(($this->getUser() == $comment->getAuthor()) || in_array("ROLE_ADMIN",$this->getUser()->getRoles())){
+            if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
+                $em->remove($comment);
+                $em->flush();
+            }
         }
 
-        return $this->redirectToRoute('episode_show', ["episode" => $epidodeId], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('episode_show', ["episode" => $epidode], Response::HTTP_SEE_OTHER);
     }
 }
