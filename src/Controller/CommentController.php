@@ -22,6 +22,8 @@ class CommentController extends AbstractController
             if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
                 $em->remove($comment);
                 $em->flush();
+
+                $this->addFlash("danger", "Commentaire supprimé !");
             }
         }
 

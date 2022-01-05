@@ -47,6 +47,8 @@ class EpisodeController extends AbstractController
             $em->persist($episode);
             $em->flush();
 
+            $this->addFlash("success", "Épisode bien ajouté !");
+
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
                 ->to('your_email@example.com')
@@ -112,6 +114,8 @@ class EpisodeController extends AbstractController
             $episode->setSlug($slugify->generate($episode->getTitle()));
             $em->flush();
 
+            $this->addFlash("success", "Épisode bien mis à jour !");
+
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -130,6 +134,8 @@ class EpisodeController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $episode->getId(), $request->request->get('_token'))) {
             $em->remove($episode);
             $em->flush();
+
+            $this->addFlash("danger", "Episode bien supprimé !");
         }
 
         return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);

@@ -36,8 +36,7 @@ class ProgramController extends AbstractController
         $form = $this->createForm(SearchProgramFormType::class);
         $form->handleRequest($request);
 
-        $allPrograms = $programRepository->findAll();
-        $programs = $allPrograms;
+        $programs = $programRepository->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData()["search"];
@@ -69,6 +68,8 @@ class ProgramController extends AbstractController
 
             $em->persist($program);
             $em->flush();
+
+            $this->addFlash("success", "Série bien ajoutée !");
 
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
@@ -131,6 +132,8 @@ class ProgramController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash("success", "Série bien mise à jour !");
 
             return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
         }

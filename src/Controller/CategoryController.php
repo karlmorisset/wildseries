@@ -52,6 +52,8 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
+            $this->addFlash("success", "Catégorie bien ajoutée !");
+
             return $this->redirectToRoute('category_index');
         }
 
@@ -85,6 +87,4 @@ class CategoryController extends AbstractController
             'programsByCategory' => $programsByCategory
         ]);
     }
-
-
 }
