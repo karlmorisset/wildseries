@@ -50,7 +50,7 @@
         </div>
 
 
-        {% if (app.user and ((app.user == comment.author)  or ("ROLE_ADMIN" in app.user.roles))) %}
+        {% if app.user and ((app.user == comment.author)  or (is_granted("ROLE_ADMIN"))) %}
             {{ include('episode/_delete_comment_form.html.twig') }}
         {% endif %}
 

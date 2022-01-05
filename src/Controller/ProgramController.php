@@ -6,6 +6,8 @@ use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Form\ProgramType;
+use App\Form\SearchProgramFormType;
+use App\Repository\ProgramRepository;
 use App\Services\Slugify;
 use Symfony\Component\Mime\Email;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,12 +31,23 @@ class ProgramController extends AbstractController
      * @Route("/", name="index")
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request, ProgramRepository $programRepository): Response
     {
-        $programs = $this->getDoctrine()->getRepository(Program::class)->findAll();
+        $form = $this->createForm(SearchProgramFormType::class);
+        $form->handleRequest($request);
+
+        $allPrograms = $programRepository->findAll();
+        $programs = $allPrograms;
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()["search"];
+
+            if(!empty($search)) $programs = $programRepository->findLikeNameOrActor($search);
+        }
 
         return $this->render('program/index.html.twig', [
             'programs' => $programs,
+            'form' => $form->createView()
         ]);
     }
 
@@ -102,7 +115,7 @@ class ProgramController extends AbstractController
 
     /**
      * Mise à jour d'une série
-     * 
+     *
      * @Route("/{program<^[a-zA-Z0-9-]+$>}/edit", methods={"GET|POST"}, name="edit")
      * @ParamConverter("program", class="App\Entity\Program", options={"mapping": {"program": "slug"}})
      * @return Response
@@ -112,7 +125,7 @@ class ProgramController extends AbstractController
         if ($this->getUser() != $program->getOwner()) {
             throw new AccessDeniedException("Seul le créateur de la série peut la modifier");
         }
-        
+
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 

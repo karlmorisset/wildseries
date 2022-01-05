@@ -3,7 +3,9 @@
 {% block title %}Tous les programmes{% endblock %}
 
 {% block body %}
-    <h1>Toutes les séries de la table program : </h1>
+    <h1>Toutes les séries</h1>
+
+    {{ include('program/_form.html.twig', {'button_label': 'Chercher une série'}) }}
 
     {% for program in programs %}
         <div>
