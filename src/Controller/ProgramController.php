@@ -36,8 +36,7 @@ class ProgramController extends AbstractController
         $form = $this->createForm(SearchProgramFormType::class);
         $form->handleRequest($request);
 
-        $allPrograms = $programRepository->findAll();
-        $programs = $allPrograms;
+        $programs = $programRepository->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData()["search"];

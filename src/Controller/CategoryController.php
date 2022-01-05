@@ -85,6 +85,4 @@ class CategoryController extends AbstractController
             'programsByCategory' => $programsByCategory
         ]);
     }
-
-
 }
