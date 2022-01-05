@@ -192,4 +192,23 @@ class ProgramController extends AbstractController
             'episode' => $episode
         ]);
     }
+
+    /**
+     * Ajoute une série à la watchlist de l'utilisateur connecté
+     *
+     * @Route("/{id}/watchlist", name="add_to_watchlist", methods={"GET", "POST"})
+     * @return Response
+     */
+    public function addToWatchlist(Program $program, EntityManagerInterface $em): Response
+    {
+        if ($this->getUser()->isInWatchlist($program)) {
+            $this->getUser()->removeFromWatchlist($program);
+        }else{
+            $this->getUser()->addToWatchlist($program);
+        }
+
+        $em->flush();
+
+        return $this->redirectToRoute("program_show", ["program" => $program->getSlug()]);
+    }
 }

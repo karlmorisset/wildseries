@@ -9,6 +9,15 @@
             <h1 class="mt-0">{{ program.title }}</h1>
             <p>{{ program.synopsis }}</p>
             <p>Catégorie : {{ program.category.name }}</p>
+            <p>
+                <a href="{{ path('program_add_to_watchlist', {'id': program.id}) }}">
+                    {% if app.user.isInWatchlist(program) %}
+                        Ajouter en favori <i class="far fa-heart"></i>
+                    {% else  %}
+                        Retirer de la liste des favoris <i class="fas fa-heart"></i>
+                    {% endif  %}
+                </a>
+            </p>
         </div>
     </div>
 
