@@ -209,6 +209,10 @@ class ProgramController extends AbstractController
 
         $em->flush();
 
-        return $this->redirectToRoute("program_show", ["program" => $program->getSlug()]);
+        return $this->json([
+            'isInWatchlist' => $this->getUser()->isInWatchlist($program)
+        ]);
+
+        // return $this->redirectToRoute("program_show", ["program" => $program->getSlug()]);
     }
 }
