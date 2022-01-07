@@ -47,7 +47,7 @@ class EpisodeController extends AbstractController
             $em->persist($episode);
             $em->flush();
 
-            $this->addFlash("success", "Épisode bien ajouté !");
+            $this->addFlash("success", "episode.added");
 
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
@@ -114,7 +114,7 @@ class EpisodeController extends AbstractController
             $episode->setSlug($slugify->generate($episode->getTitle()));
             $em->flush();
 
-            $this->addFlash("success", "Épisode bien mis à jour !");
+            $this->addFlash("success", "episode.edited");
 
             return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -135,7 +135,7 @@ class EpisodeController extends AbstractController
             $em->remove($episode);
             $em->flush();
 
-            $this->addFlash("danger", "Episode bien supprimé !");
+            $this->addFlash("danger", "episode.deleted");
         }
 
         return $this->redirectToRoute('episode_index', [], Response::HTTP_SEE_OTHER);

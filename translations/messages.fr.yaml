@@ -1,0 +1,13 @@
+category.added: 'Catégorie bien ajoutée !'
+program.added: 'Série bien ajoutée'
+program.edited: 'Série bien mise à jour !'
+season.added: 'Saison bien ajoutée !'
+season.edited: 'Saison bien mise à jour !'
+season.deleted: 'Saison bien supprimée !'
+episode.added: 'Épisode bien ajouté !'
+episode.edited: 'Épisode bien mis à jour !'
+episode.deleted: 'Épisode bien supprimé !'
+comment.deleted: 'Commentaire supprimé !'
+account.logout: 'Se déconnecter'
+account.login: 'Se connecter'
+hello_username: Salut %username%

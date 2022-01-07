@@ -23,7 +23,7 @@ class CommentController extends AbstractController
                 $em->remove($comment);
                 $em->flush();
 
-                $this->addFlash("danger", "Commentaire supprimé !");
+                $this->addFlash("danger", "comment.deleted");
             }
         }
 

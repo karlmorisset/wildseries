@@ -1,0 +1,13 @@
+category.added: 'Category correctly added !'
+program.added: 'Program correctly added'
+program.edited: 'Program correctly updated !'
+season.added: 'Season correctly added !'
+season.edited: 'Season correctly updated !'
+season.deleted: 'Season correctly deleted !'
+episode.added: 'Episode correctly added !'
+episode.edited: 'Episode correctly updated !'
+episode.deleted: 'Episode correctly deleted !'
+comment.deleted: 'Comment deleted !'
+account.logout: 'Logout'
+account.login: 'Login'
+hello_username: Hello %username%

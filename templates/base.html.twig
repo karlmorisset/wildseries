@@ -22,7 +22,7 @@
             {% for category, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ category }}">
-                        {{ message }}
+                        {{ message|trans }}
                     </div>
                 {% endfor %}
             {% endfor %}
@@ -31,6 +31,14 @@
         <header>
             {% include "layout/_navbar.html.twig" %}
         </header>
+
+        {% if app.user %}
+            <h1>
+                {% trans with {'%username%': app.user.email} %}
+                    hello_username
+                {% endtrans %}
+            </h1>
+        {% endif %}
 
         {% block body %}{% endblock %}
     </body>

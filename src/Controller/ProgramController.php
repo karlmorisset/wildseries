@@ -69,7 +69,7 @@ class ProgramController extends AbstractController
             $em->persist($program);
             $em->flush();
 
-            $this->addFlash("success", "Série bien ajoutée !");
+            $this->addFlash("success", "program.added");
 
             $email = (new Email())
                 ->from($this->getParameter('mailer_from'))
@@ -133,7 +133,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash("success", "Série bien mise à jour !");
+            $this->addFlash("success", "program.edited");
 
             return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -212,7 +212,5 @@ class ProgramController extends AbstractController
         return $this->json([
             'isInWatchlist' => $this->getUser()->isInWatchlist($program)
         ]);
-
-        // return $this->redirectToRoute("program_show", ["program" => $program->getSlug()]);
     }
 }

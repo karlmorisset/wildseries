@@ -13,7 +13,9 @@ import './bootstrap';
 
 let link = document.querySelector("#watchlist")
 
-link.addEventListener('click', addToWatchlist);
+if(link !== null){
+    link.addEventListener('click', addToWatchlist);
+}
 
 function addToWatchlist(event) {
     event.preventDefault();
@@ -28,3 +30,12 @@ function addToWatchlist(event) {
         }
     })
 }
+
+
+// let langChoice = document.querySelector("#lang")
+
+// langChoice.addEventListener('change', e => {
+//     let newLang = e.target.value
+
+//     fetch("/fr/lang", {method: 'POST', body: {lang : newLang}}).then(res => res.json()).then(data => console.log(data))
+// })
