@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,4 +32,19 @@ class DefaultController extends AbstractController
 
         return $this->redirect($referer);
     }
+
+
+    /**
+     * Permet de rendre une vue spécifique pour une dropdown des catégories
+     *
+     * @param CategoryRepository $categoryRepository
+     * @return Response
+     */
+    public function navbarTop(CategoryRepository $categoryRepository): Response
+    {
+       return $this->render('layout/_navbartop.html.twig', [
+          'categories' => $categoryRepository->findBy([], ['id' => 'DESC'])
+       ]);
+    }
+
 }

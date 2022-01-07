@@ -1,0 +1,11 @@
+<div class="dropdown show">
+  <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Choisissez une catégorie
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+    {% for category in categories %}
+        <a class="dropdown-item" href="{{ path('category_show', {categoryName:category.name}) }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+</div>
