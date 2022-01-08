@@ -11,3 +11,4 @@ comment.deleted: 'Commentaire supprimé !'
 account.logout: 'Se déconnecter'
 account.login: 'Se connecter'
 hello_username: Salut %username%
+actor_picture.added: "Photo de l'acteur correctement ajoutée"

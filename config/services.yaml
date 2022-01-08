@@ -7,6 +7,7 @@ parameters:
     mailer_from: '%env(resolve:MAILER_FROM_ADDRESS)%'
     app.locales: fr|en
     locale: fr
+    upload_directory: '%kernel.project_dir%/public/upload/'
 
 services:
     # default configuration for services in *this* file

@@ -11,3 +11,4 @@ comment.deleted: 'Comment deleted !'
 account.logout: 'Logout'
 account.login: 'Login'
 hello_username: Hello %username%
+actor_picture.added: "Actor picture correctly added"

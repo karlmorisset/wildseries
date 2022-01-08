@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Actor;
+use App\Form\ActorType;
+use App\Repository\ActorRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,23 +20,34 @@ class ActorController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(): Response
+    public function index(ActorRepository $actorRepository): Response
     {
-        $actors = $this->getDoctrine()->getRepository(Actor::class)->findAll();
-
         return $this->render('actor/index.html.twig', [
-            'actors' => $actors,
+            'actors' => $actorRepository->findAll()
         ]);
     }
 
 
     /**
-     * @Route("/{actor}", name="show")
+     * @Route("/{actor}", name="show", methods={"GET|POST"})
      */
-    public function show(Actor $actor): Response
+    public function show(Request $request, Actor $actor, EntityManagerInterface $em): Response
     {
+        $form = $this->createForm(ActorType::class, $actor);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->flush();
+
+            $this->addFlash("success", "actor_picture.added");
+
+            return $this->redirectToRoute('actor_show', ['actor' => $actor->getId()]);
+        }
+
         return $this->render('actor/show.html.twig', [
             'actor' => $actor,
+            'form' => $form->createView()
         ]);
     }
 }

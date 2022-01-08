@@ -1,21 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Les apparitions de {{actor.name}}{% endblock %}
+{% block title %}Les apparitions de
+	{{actor.name}}
+{% endblock %}
 
 {% block body %}
-    <h1>{{ actor.name }}</h1>
+	<h1>{{ actor.name }}</h1>
 
-   {% for program in actor.programs %}
-        <div>
-            <a href="{{path('program_show', {program: program.slug})}}">{{program.title}}</a>
-        </div>
+	<img src="{{ vich_uploader_asset(actor) }}" alt="{{ actor.name }}">
 
-    {% else %}
-        Aucune série trouvée.
-    {% endfor %}
+	{% for program in actor.programs %}
+		<div>
+			<a href="{{path('program_show', {program: program.slug})}}">{{program.title}}</a>
+		</div>
+	{% else %}
+		Aucune série trouvée.
+	{% endfor %}
 
-    <a href="{{ path('program_index') }}">
-        Retour à la liste des programmes
-    </a>
+	{% if app.user %}
+		{% if is_granted('ROLE_ADMIN') %}
+			{{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+			{{ form_widget(form) }}
+			<button class="btn btn_primary">{{ button_label|default('Save') }}</button>
+			{{ form_end(form) }}
+		{% endif %}
+	{% endif %}
+
+	<a href="{{ path('program_index') }}">
+		Retour à la liste des programmes
+	</a>
 
 {% endblock %}

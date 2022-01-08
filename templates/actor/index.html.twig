@@ -7,7 +7,10 @@
     <h1>Les acteurs</h1>
     {% for actor in actors %}
         <div>
-            <a href="{{path('actor_show', {actor: actor.id})}}">{{actor.name}}</a>
+            <a href="{{path('actor_show', {actor: actor.id})}}">
+                {{actor.name}}
+                <img src="{{ vich_uploader_asset(actor) }}" alt="{{ actor.name }}">
+            </a>
         </div>
     {% endfor %}
 
